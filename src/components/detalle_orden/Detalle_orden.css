@@ -1,0 +1,87 @@
+
+.detalle_orden{
+    margin-left: 59px;
+    background-color: #f6f6f6;
+}
+
+.subtitulos{
+    background-color: #d9d9d9;
+    border-style: solid;
+    border-color: black;
+    border-width: 2px;
+    padding-left: 20px;
+    font-size: 30px;
+
+}
+
+#Numero_orden{
+    font-size:30px;
+}
+
+.cajas{
+    display:flex;
+    font-size: 30px;
+    background-color: white;
+    padding-left: 40px;
+    margin-bottom: 50px;
+    padding-bottom: 40px;   
+    padding-top: 15px;
+    
+}
+
+.radiostodo{
+    font-weight: bold;
+    padding-bottom: 20px;
+}
+
+.radiostodo span {
+    margin-right: 150px;
+    
+}
+
+.cajas article{
+    margin-right: 500px;
+
+}
+
+.radios{
+    font-size: 30px;
+    margin-left: 30px; 
+}
+
+#BotonCancelar{
+    margin-top: 20px;
+    font-size: 25px;
+    white-space: nowrap;
+    width: 400px;
+    height:50px;
+    font-weight: bold;
+    color:black;
+    background-color: white;
+}
+
+
+#QRimagen{
+    margin: 300px;
+    width: 300px;
+    margin:10px 10px 10px 10px;
+   
+
+}
+
+.DatosTarjeta{
+    background-color: aliceblue;
+    border-radius: 10px;
+    border-color: black;
+    border: 1px solid black;
+    width: 400px;
+    height: 500px;
+    padding: 20px 20px 30px 20px ;
+}
+.DatosTarjeta input{
+    width: 500x;
+    height: 30px;
+    font-size: 20px;
+    border-radius: 5px;
+    
+}

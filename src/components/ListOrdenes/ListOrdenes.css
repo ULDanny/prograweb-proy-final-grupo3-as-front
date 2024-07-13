@@ -1,0 +1,95 @@
+
+  
+  h2 {
+    border-bottom: 2px solid #ccc;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+  }
+  
+  .order-header, .order-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid #ccc;
+  }
+  .order-item {
+    width: 100%;
+  }
+
+  .order-header {
+    font-weight: bold;
+    background-color: #eee;
+    padding: 10px;
+  }
+  
+  .order-item:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+  
+  .order-item p {
+    margin: 5px 0;
+  }
+  
+  .order-item button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+  
+  .order-item button:hover {
+    background-color: #0056b3;
+  }
+  
+  .pagination {
+    display: flex;
+    justify-content: center;
+    padding: 20px 0;
+  }
+  
+  .pagination button {
+    margin: 0 5px;
+    padding: 5px 10px;
+    border: 1px solid #007bff;
+    background-color: white;
+    color: #007bff;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+  
+  .pagination button:hover {
+    background-color: #007bff;
+    color: white;
+  }
+  
+  .pagination button:disabled {
+    background-color: #ccc;
+    border: 1px solid #ccc;
+    color: #fff;
+    cursor: default;
+  }
+  
+  .pagination .active {
+    background-color: #007bff;
+    color: white;
+    border: 1px solid #007bff;
+  }
+  
+  .order-info{
+    width: 70%;
+    align-items: right;
+    text-align: left;
+    padding-left: 20px;
+  }
+
+  .order-list{
+    width: 80%;
+  }
+
+  .order-nro
+  {
+    margin-right: 20px;
+  }

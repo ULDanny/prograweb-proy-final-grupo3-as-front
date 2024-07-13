@@ -1,0 +1,72 @@
+.conjunto{
+    display:flex;
+    
+}
+
+.lista{
+    list-style: none;
+}
+
+.todo{
+    background-color:#f6f6f6 ;
+}
+
+.elementos{
+    background-color: white;
+    height: 600px;
+    width: 300px;
+    margin-left: 20px;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    margin-right: 30px;
+    padding-left: 20px;
+    padding-top: 20px;
+}
+
+.elementos div {
+    font-size: 30px;
+    
+}
+
+.elementos ul{
+    font-size: 22px;
+    
+}
+
+.Datos{
+    width: 100%;
+    margin-top: 30px;
+}
+.Datos div{
+    font-size: 35px;
+    background-color: #d9d9d9;
+    margin-bottom: 30px;
+    height: 65px;
+    padding-left: 20px;
+    padding-top: 5px;
+}
+
+
+.CajasUs{
+    text-align: center;
+    font-size: 30px;
+    border-radius: 10px;
+    height: 70px;
+    width: 500px;
+}
+
+#botonact{
+    background-color: black;
+    color: white;
+    border-radius: 5px;
+    width: 250px;
+    height: 50px;
+    font-size: 20px;
+    text-align: center;
+    margin-left: 130px;
+}
+
+.dat{
+    margin-left: 250px;
+    
+}

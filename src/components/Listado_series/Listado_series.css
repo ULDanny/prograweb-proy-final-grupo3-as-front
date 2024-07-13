@@ -1,0 +1,70 @@
+#productTable thead{
+    font-size: 10px;
+    
+}
+
+#productTable tbody{
+    font-size: 10px;
+    
+}
+
+.ListadoSeries{
+    display: flex;
+    background-color: #f6f6f6 ;
+    padding-bottom: 30px;
+    width: 100%;
+}
+
+.Admin{
+    background-color: white;
+    margin: 20px 40px 20px 20px;
+    width: 380px;
+    height: 500px;
+    border-radius: 5px;
+}
+
+.ListaAdmin{
+    list-style: none;
+    
+}
+
+.ListaAdmin li{
+    font-size: 10px;
+}
+
+#Admindiv{
+    padding-left: 20px;
+    font-size: 10px;
+    font-weight: bold;
+    padding-top: 20px;
+}
+
+#searchBar{
+    margin: 10px;
+}
+
+#productTable{
+    margin-left: 40px;
+
+}
+
+#productTable td{
+    width: 16%;
+    white-space: nowrap;
+    
+}
+
+#productTable th{
+    width: 16%;
+    
+}
+
+#tituloseries{
+    border-radius: 30px;
+}
+
+#btndetalleserie{
+    width: 250px;
+    height: 50px;
+    font-size: 20px;
+}

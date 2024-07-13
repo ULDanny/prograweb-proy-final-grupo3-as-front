@@ -1,0 +1,65 @@
+.order-container {
+  text-align: center;
+  margin-top: 50px;
+}
+.order-container h1 {
+  font-size: 24px;
+  color: #333;
+}
+.order-container p {
+  font-size: 16px;
+  color: #555;
+}
+.order-container a {
+  color: #555;
+}
+
+.recommendations {
+  width: 50%;
+  margin: auto;
+}
+
+.recommendations-title {
+  margin-top: 30px;
+  font-size: 20px;
+  color: #333;
+}
+.recommendations-items {
+  display: flex;
+  justify-content: center;
+  margin-top: 30px;
+}
+.order-item {
+  background-color: #fff;
+  margin: 10px;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  width: 150px;
+  text-align: left;
+  transition: transform 0.3s ease;
+}
+.order-item:hover {
+  transform: scale(1.05);
+}
+.order-item img {
+  width: 100px;
+  height: 100px;
+  background-color: #000;
+  display: block;
+  margin: 0 auto 10px;
+}
+.order-item p {
+  margin: 10px 0;
+  font-size: 14px;
+  color: #333;
+}
+.order-item a {
+  font-size: 14px;
+  color: #007bff;
+  text-decoration: none;
+}
+
+.espacio {
+  padding: 100px;
+}

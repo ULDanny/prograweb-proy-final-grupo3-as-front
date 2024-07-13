@@ -1,0 +1,76 @@
+.saved-for-later {
+  margin-top: 20px;
+}
+
+.saved-header {
+  background-color: #ddd;
+  padding: 10px;
+  font-weight: bold;
+  border-radius: 5px 5px 0 0;
+}
+
+.cart-item {
+  display: flex;
+  align-items: center;
+  border: 1px solid #ddd;
+  border-radius: 0 0 5px 5px;
+  padding: 10px;
+  margin-top: -1px;
+}
+
+.product-image img {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+.product-details {
+  flex-grow: 1;
+  padding: 0 20px;
+}
+
+.product-name {
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.product-quantity {
+  margin-bottom: 10px;
+}
+
+.product-actions a {
+  color: #007bff;
+  text-decoration: none;
+  margin-right: 10px;
+}
+
+.product-actions a:hover {
+  text-decoration: underline;
+}
+
+.product-pricing {
+  text-align: right;
+}
+
+.product-price,
+.product-subtotal {
+  margin-bottom: 10px;
+}
+
+.product-price span,
+.product-subtotal span {
+  display: block;
+}
+
+.button-as-text {
+  background: none;
+  border: none;
+  color: #888;
+  text-decoration: none; /* Opcional, para darle un estilo de enlace */
+  cursor: pointer; /* Para que se vea como un enlace al pasar el mouse */
+  padding: 5px;
+  font: inherit; /* Hereda la fuente del contenedor padre */
+}
