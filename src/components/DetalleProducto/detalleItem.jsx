@@ -1,12 +1,14 @@
 import { Navigate} from "react-router-dom";
 import { useItemId } from "../../context/itemIdContext";
 import { productosTotal } from "../../data/productosTotal";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import ProductoAPI from '../../api/producto'
 
 const ItemDetail = () => {
     const {itemId} = useItemId();
 
     const [count, setCount] = useState(0)
+    const [item, setItem] = useState(null);
     function handleIncrement(){
         setCount(count+1)
     }
@@ -19,10 +21,20 @@ const ItemDetail = () => {
             setCount(count-1)
         }
     }
-    const findItembyId = (id) => {
-        return productosTotal.find(item => item.id === parseInt(id));
+    const findItembyId = async (id) => {
+        return  await ProductoAPI.findOne(id);
     };
-    const item = findItembyId(itemId);
+    useEffect(() => {
+        handleOnLoad();
+    
+    }, []);
+
+    const handleOnLoad = async () => {
+        const item = await findItembyId(itemId);
+        setItem(item);
+    };
+
+
     if(!item){
         return <h1>ITEM NO ENCONTRADO</h1>
     }
@@ -34,7 +46,7 @@ const ItemDetail = () => {
         
     }
     const nombreStyle ={
-        paddingRight:'1200px',
+        paddingRight:'200px',
         fontSize: '15px',
         marginLeft: '20px'
     }
