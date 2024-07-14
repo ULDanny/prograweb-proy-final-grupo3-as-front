@@ -23,10 +23,12 @@ const ListOrders = () => {
           console.log(response);
           console.log(JSON.parse(localStorage.getItem('user')).id);
           console.log(response.filter(
-            order => order.idCliente === JSON.parse(localStorage.getItem('user')).id
+            order => order.idCliente === JSON.parse(localStorage.getItem('user')).id && 
+            order.envios !="Cancelado"
           ))
           setSortedOrders(response.filter(
-            order => order.idCliente === JSON.parse(localStorage.getItem('user')).id
+            order => order.idCliente === JSON.parse(localStorage.getItem('user')).id && 
+            order.envios !="Cancelado"
           ));
         });
     } catch (error) {
