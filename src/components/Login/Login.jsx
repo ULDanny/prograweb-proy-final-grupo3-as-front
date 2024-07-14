@@ -42,13 +42,13 @@ export default function Login() {
         if (user) {
           login(user); 
           if (user.rol == 'admin') {
-            const data = { ...user, username: null, lastname: null };
+            const data = { ...user,idCliente:null, username: null, lastname: null };
             localStorage.setItem('user', JSON.stringify(data));
             navigate('/dashboardAdmin');
             return;
           }
           const cliente = clienteAccounts.find(cliente => cliente.idUsuario === user.id);
-          const data = { ...user, username: cliente.nombre, lastname: cliente.apellido  };
+          const data = { ...user, idCliente: cliente.id,  username: cliente.nombre, lastname: cliente.apellido  };
           localStorage.setItem('user', JSON.stringify(data));
           navigate('/');
         } else {
