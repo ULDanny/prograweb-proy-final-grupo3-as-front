@@ -105,6 +105,22 @@ export default function DetalleOrden() {
        
     }
 
+    const cancelarOrden = async () => {
+        try {
+
+
+            const payloadOrden = {
+                id: order.id,
+                envios: "Cancelado"
+            }
+            await ordenapi.update(payloadOrden);
+            alert("Orden cancelada correctamente");
+        } catch (error) {
+            console.error('Error al cancelar orden:', error);
+            alert("Error al cancelar orden");
+        }
+    }
+
     return (
         <>{order?(
             <>
@@ -163,7 +179,11 @@ export default function DetalleOrden() {
                 <span>Envío: S/{precioEnvio} <br></br></span>
                 <span>Impuestos: S/{order.impuestos} <br></br></span>
                 <span>Total: S/{order.total}<br></br> </span>
-                <button id="BotonCancelar">Cancelar Pedido</button>
+                <button id="BotonCancelar" onClick={ 
+                    () => {
+                        cancelarOrden();
+                    }
+                 } >Cancelar Pedido</button>
             </article>
         </section>
         </section>

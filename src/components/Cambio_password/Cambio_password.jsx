@@ -1,9 +1,12 @@
 import './Cambio_password.css';
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import usuarioApi from '../../api/usuario.js';
 
 export default function CambioPassword() {
 
     const [user, setUser] = useState(null);
+    const navigate = useNavigate();
 
     const usernuevo = {
         email: 'hola@mail.com',
@@ -18,7 +21,11 @@ export default function CambioPassword() {
         setUser(parsedUser);
     }, []);
 
-    const handleUpdate = () => {
+    const handleUpdate = async () => {
+
+
+
+
         const actualPassword = document.getElementById('actualpassword').value;
         const newPassword = document.getElementById('newpassword').value;
         const againPassword = document.getElementById('againpassword').value;
@@ -32,15 +39,28 @@ export default function CambioPassword() {
             alert('La contraseña actual es incorrecta');
             return;
         }
+        try{
+            const payloadUpdate = {
+                id: user.id,
+                password: newPassword
+            };
 
-        const updatedUser = {
-            ...user,
-            password: newPassword
-        };
-
-        setUser(updatedUser);
-        localStorage.setItem('user', JSON.stringify(updatedUser));
-        alert('Contraseña actualizada correctamente');
+            await usuarioApi.update(payloadUpdate);
+    
+            const updatedUser = {
+                ...user,
+                password: newPassword
+            };
+    
+            setUser(updatedUser);
+            localStorage.setItem('user', JSON.stringify(updatedUser));
+            alert('Contraseña actualizada correctamente');
+            navigate('/account');
+        }
+        catch(error){
+            console.log(error);
+        }
+        
     }
 
     return (

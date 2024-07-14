@@ -1,34 +1,52 @@
 import React, { useEffect, useState } from 'react';
+
 import { useNavigate } from 'react-router-dom';
-import { dataseries } from '../../data/series';
 import './Listado_series.css';
 import MenuNavAdmin from '../MenuNavAdmin/MenuNavAdmin';
+import serieApi from '../../api/serie.js';
+
 
 const ListadoSeries = () => {
     const navigate = useNavigate();
-    const [series, setseries] = useState(dataseries);
+    const [series, setseries] = useState([]);
+    const [allSeries, setAllSeries] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
 
     useEffect(() => {
-        const rawseries = localStorage.getItem('series');
+        /*const rawseries = localStorage.getItem('series');
         if (!rawseries) {
             localStorage.setItem('series', JSON.stringify(dataseries));
         } else {
             setseries(JSON.parse(rawseries));
-        }
+        }*/
+        handleOnLoad();
     }, []);
+
+
+    const handleOnLoad = async () => {
+        try {
+            await serieApi.findAllComplete()
+                .then((response) => {
+                    console.log(response);
+                    setAllSeries(response);
+                    setseries(response);
+                });
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
     useEffect(() => {
         handleSearch();
     }, [searchTerm]);
 
     const handleSearch = () => {
-        const rawseries = localStorage.getItem('series');
-        if (rawseries) {
-            const allseries = JSON.parse(rawseries);
+        
+        if (allSeries.length > 0) {
+            const allseries = allSeries;
             const filteredseries = allseries.filter(serie =>
                 serie.id.toString().includes(searchTerm) ||
-                serie.marcaProd.toLowerCase().includes(searchTerm.toLowerCase())
+                serie.nombre.toLowerCase().includes(searchTerm.toLowerCase())
             );
             setseries(filteredseries);
         }
@@ -141,7 +159,7 @@ const ListadoSeries = () => {
                             <th>Nombre</th>
                             <th>Descripción</th>
                             <th>Fecha de registro</th>
-                            <th>Número de series</th>
+                            <th>Número de productos</th>
                             
                             <th>Acciones</th>
                         </tr>
@@ -150,10 +168,10 @@ const ListadoSeries = () => {
                         {series.map((serie) => (
                             <tr key={serie.id}>
                                 <td>{serie.id}</td>
-                                <td style={styles.tablamarcaProd}><b>{serie.marcaProd}</b> </td>
+                                <td style={styles.tablamarcaProd}><b>{serie.nombre}</b> </td>
                                 <td style ={styles.tabladescr}>{serie.descrip}</td>
                                 <td>{serie.fechaRegistro}</td>
-                                <td>{serie.stockProd}</td>
+                                <td>{serie.productos.length}</td>
                                 
                                 <td>
                                     <button type="button" style={styles.BotonAccion} onClick={() => handleView(serie.id)}>VER</button>
