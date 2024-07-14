@@ -1,16 +1,15 @@
-import './SavedforLater.css'
-
+import './SavedforLater.css';
 
 const SavedforLater = ({ item, moveItemToCart, removeItemFromSaved }) => {
     return (
       <section className="cart"> 
         <div className="cart-item">
-          <img src={item.imagen} alt="" />
+          <img src={item.producto ? item.producto.imagen : ''} alt="" />
           <div className="item-details">
-            <p>{item.Marca} {item.Modelo} {item.Procesador} {item.RAM} {item.Almacenamiento}</p>
+            <p>{item.producto ? `${item.producto.marca} ${item.producto.nombre} ${item.producto.procesador} ${item.producto.RAM}` : ''}</p>
             <div className="actions">
               <button className="button-as-text" onClick={() => removeItemFromSaved(item)}>
-                Eliminar    |
+                Eliminar |
               </button>
               <button className="button-as-text" onClick={() => moveItemToCart(item)}>
                 Mover al carrito
@@ -18,14 +17,14 @@ const SavedforLater = ({ item, moveItemToCart, removeItemFromSaved }) => {
             </div>
           </div>
           <div className="item-quantity">
-            <label for="quantity-1">Cantidad: 1</label>
+            <label htmlFor="quantity-1">Cantidad: {item.cantidad}</label>
           </div>
           <div className="item-price">
-            <p>Precio: ${item.Precio}</p>
+            <p>Precio: ${item.producto ? item.producto.precio : ''}</p>
           </div>
         </div>
       </section>
     );
-  };
+};
 
-export default SavedforLater
+export default SavedforLater;
