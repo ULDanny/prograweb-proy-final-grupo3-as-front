@@ -2,7 +2,7 @@ import {useNavigate} from 'react-router-dom';
 export default function OrdenFila(order){
     const navigate = useNavigate();
     function verDetalle () {
-        localStorage.setItem('order', JSON.stringify(order));
+        localStorage.setItem('order', order.id);
         console.log(localStorage.getItem('order'));
         navigate('/detalle_orden');
     };
