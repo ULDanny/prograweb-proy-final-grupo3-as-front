@@ -1,11 +1,36 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Calendario from '../Calendario/Calendario'
+import ordenApi from '../../api/orden';
+import clienteApi from '../../api/cliente';
 
 const InformacionDashboard = () => {
     const [startDate, setStartDate] = useState(new Date());
+    const [ordenes, setOrdenes] = useState(0);
+    const [clientesNuevos, setClientesNuevos] = useState(0);
+    const [ingresos, setIngresos] = useState(0);
+
     const handleDateChange = (date) => {
         setStartDate(date);
     };
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const formattedDate = startDate.toISOString().split('T')[0];
+
+            const ordenesResponse = await ordenApi.findAll();
+            const ordenesDelDia = ordenesResponse.filter(orden => orden.fechaOrden.startsWith(formattedDate));
+            setOrdenes(ordenesDelDia.length);
+
+            const clientesResponse = await clienteApi.findAll();
+            const clientesDelDia = clientesResponse.filter(cliente => cliente.fechaRegistro.startsWith(formattedDate));
+            setClientesNuevos(clientesDelDia.length);
+
+            const ingresosDelDia = ordenesDelDia.reduce((total, orden) => total + parseFloat(orden.total), 0);
+            setIngresos(ingresosDelDia.toFixed(2));
+        };
+
+        fetchData();
+    }, [startDate]);
 
     return (
         <>
@@ -14,26 +39,26 @@ const InformacionDashboard = () => {
                     <h3 style={styles.titulo}>Dashboard</h3>
                     <Calendario startDate={startDate} handleDateChange={handleDateChange} />
                 </div>
-                    <div style={styles.container}>
-                        <div style={styles.box}>
-                            <div style={styles.datos}>
-                                <p>27</p>
-                            </div>
-                            <p>Órdenes del día de hoy</p>
+                <div style={styles.container}>
+                    <div style={styles.box}>
+                        <div style={styles.datos}>
+                            <p>{ordenes}</p>
                         </div>
-                        <div style={styles.box}>
-                            <div style={styles.datos}>
-                                <p>27</p>
-                            </div>
-                            <p>Usuarios nuevos</p>
-                        </div>
-                        <div style={styles.box}>
-                            <div style={styles.datos}>
-                                <p>27</p>
-                            </div>
-                            <p>Ingresos de hoy</p>
-                        </div>
+                        <p>Órdenes del día</p>
                     </div>
+                    <div style={styles.box}>
+                        <div style={styles.datos}>
+                            <p>{clientesNuevos}</p>
+                        </div>
+                        <p>Clientes nuevos</p>
+                    </div>
+                    <div style={styles.box}>
+                        <div style={styles.datos}>
+                            <p>{ingresos}</p>
+                        </div>
+                        <p>Ingresos del día</p>
+                    </div>
+                </div>
             </section>
         </>
     );
@@ -72,10 +97,9 @@ const styles = {
         textAlign: 'center',
     },
     datos: {
-        with: '40px',
+        width: '40px',
         fontSize: '40px',
     },
-
 };
 
 export default InformacionDashboard;
