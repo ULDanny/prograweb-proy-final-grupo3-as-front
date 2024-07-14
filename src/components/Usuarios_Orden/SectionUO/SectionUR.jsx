@@ -13,7 +13,8 @@ export default function SectionUR() {
             try {
                 const dataUsuarios = await usuarioAPI.findAll();
                 const dataClientes = await clienteAPI.findAll();
-                const combinedData = dataUsuarios.map(usuario => {
+                const filteredUsuarios = dataUsuarios.filter(usuario => usuario.rol === 'cliente');
+                const combinedData = filteredUsuarios.map(usuario => {
                     const cliente = dataClientes.find(c => c.idUsuario === usuario.id);
                     return {
                         id: usuario.id,
