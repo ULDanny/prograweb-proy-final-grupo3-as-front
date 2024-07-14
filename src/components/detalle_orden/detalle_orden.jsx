@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 import { useState } from 'react';
 import PagoQR from './Pago_QR';
 import PagoTarjeta from './Pago_tarjeta';
+import ordenapi from '../../api/orden';
 
 export default function DetalleOrden() {
 
@@ -37,18 +38,33 @@ export default function DetalleOrden() {
 
       
     useEffect(() => {
-        console.log(localStorage.getItem('order'));
-        const storedOrder = localStorage.getItem('order');
-       let parsedOrder;
-        try {
-        parsedOrder = JSON.parse(storedOrder);
-        } catch (error) {
-        console.error('Error parsing storedOrder:', error);
-        }
-        setOrder(parsedOrder);
-
+        cargar()
 
     }, []);
+
+    const cargar = async () => {
+        console.log(localStorage.getItem('order'));
+        const idOrder = localStorage.getItem('order');
+       let parsedOrder;
+        try {
+        parsedOrder = await ordenapi.findOneComplete(idOrder);
+        } catch (error) {
+            
+        console.error('Error al obtener orden:', error);
+        }
+        console.log(parsedOrder);
+        setOrder(parsedOrder);
+        
+    }
+
+    if (order){
+        if (order.tipoPago == "Tarjeta de Crédito"){
+            TIPODEPAGO2();      
+        }
+        else {
+            TIPODEPAGO();
+        }
+    }
 
     function TIPODEPAGO(){
         const qr = document.querySelector("#PAGOQR").value
@@ -114,9 +130,9 @@ export default function DetalleOrden() {
             <article>
                 <div>
                     <b>Pago</b><br></br>
-                    <input type="radio" id="PAGOQR" name="metpago" value="QR"  onClick={TIPODEPAGO} /> <span>Pago con código QR</span><br></br>
+                    <input type="radio" id="PAGOQR" name="metpago" value="QR"  checked={order?.tipoPago == "Yape"} /> <span>Pago con código QR</span><br></br>
                     <PagoQR display={displayPagoQR}/>
-                    <input type="radio" id="PAGOTARJETA" name="metpago" value="Tarjeta" onClick={TIPODEPAGO2}/> <span>Pago con tarjeta de crédito</span><br></br> <br></br>
+                    <input type="radio" id="PAGOTARJETA" name="metpago" value="Tarjeta"  checked={order?.tipoPago== "Tarjeta de Crédito"}/> <span>Pago con tarjeta de crédito</span><br></br> <br></br>
                     <PagoTarjeta display={displayPagoTarjeta}/>
                 </div>
             </article>
