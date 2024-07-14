@@ -5,7 +5,7 @@ const OrderComplete =() =>{
         <>
         <div class="order-container">
             <h1>¡Muchas gracias por tu pedido!</h1>
-            <p>Puedes ver el detalle y estado de tu pedido ingresando a <a href="#">tu cuenta</a>.</p>
+            <p>Puedes ver el detalle y estado de tu pedido ingresando a <a href="/account">tu cuenta</a>.</p>
         </div>
         <br /><br />
         <div className="recommendations">
