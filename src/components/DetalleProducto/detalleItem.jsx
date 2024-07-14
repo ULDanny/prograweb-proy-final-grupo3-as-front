@@ -62,7 +62,7 @@ const ItemDetail = () => {
     }
 
     const nombreStyle = {
-        paddingRight: '1200px',
+        paddingRight: '200px',
         fontSize: '15px',
         marginLeft: '20px'
     }
