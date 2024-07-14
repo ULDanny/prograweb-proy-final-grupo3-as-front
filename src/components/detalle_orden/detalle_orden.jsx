@@ -14,32 +14,14 @@ export default function DetalleOrden() {
     const [precioEnvio,setPrecioEnvio ] = useState(0.0) 
     const [impuestos,setImpuestos ] = useState(0.0) 
     const [precioTotalOrden,setPrecioTotalOrden ] = useState(0.0) 
-    const nuevaorder={
-        id: 1,
-        items: 'x3 Items (Juego de cartas, juego de cartas...)',
-        date: '12 de febrero de 2022',
-        date2: new Date('2022-02-12'),
-        total: 'S/ 122.00',
-        precioTotal: 122,
-        address: 'Jiron Huascar 123, Jesus Maria, Lima, Peru',
-        orderNumber: '12345232'
-      }
 
-    const handleChangeOption = (event) =>{
-        setEnvio(event.target.value)
-        calcularPrecios()
-    }
 
-    function calcularPrecios(){
-        setPrecioEnvio(parseInt(envio))
-        setImpuestos(parseFloat(order.precioTotal)*0.18)
-        setPrecioTotalOrden(parseFloat(order.precioTotal)+precioEnvio+impuestos)
-    }
 
-      
+     
+
     useEffect(() => {
         cargar()
-
+        
     }, []);
 
     const cargar = async () => {
@@ -57,18 +39,29 @@ export default function DetalleOrden() {
         
     }
 
-    if (order){
-        if (order.tipoPago == "Tarjeta de Crédito"){
-            TIPODEPAGO2();      
+
+    useEffect(() => {
+        if (order){
+            if (order.tipoPago == "Tarjeta de Crédito"){
+                TIPODEPAGO2();      
+            }
+            else {
+                TIPODEPAGO();
+            }
+
+            if (order.tipoEnvio == "Economico"){
+                setPrecioEnvio(10.0)
+            }else {
+                setPrecioEnvio(17.0)
+            }
         }
-        else {
-            TIPODEPAGO();
-        }
-    }
+    }, [order]);
+
+    
 
     function TIPODEPAGO(){
-        const qr = document.querySelector("#PAGOQR").value
-        const tarjeta = document.querySelector("#PAGOTARJETA").value
+        const qr = document.querySelector("#PAGOQR").value 
+        const tarjeta = document.querySelector("#PAGOTARJETA").value 
         let nada; 
 
         if (qr =="QR"){
@@ -88,7 +81,7 @@ export default function DetalleOrden() {
         }}
 
         function TIPODEPAGO2(){
-            const qr = document.querySelector("#PAGOQR").value
+            const qr = document.querySelector("#PAGOQR").value 
             const tarjeta = document.querySelector("#PAGOTARJETA").value
             let nada; 
     
@@ -124,7 +117,10 @@ export default function DetalleOrden() {
                     <b>Dirección de envío </b>
                     
                 </div>
-                    <span>{order.address}</span>
+                    <span>{order.direccion}</span><br />
+                    <span>{order.distrito}</span><br />
+                    <span>{order.departamento}</span><br />
+                    <span>{order.pais}</span>
             </article>
 
             <article>
@@ -142,19 +138,20 @@ export default function DetalleOrden() {
         
         <section className="radios">
             <article className="radiostodo">
-            <input type="radio" id="radio1Economic" name="envio" value="10" onChange={handleChangeOption} /> <span>Económico Aéreo - S/10.00</span>
-            <input type="radio" id="radio2Prioritario" name="envio" value="17" onChange={handleChangeOption}/> <span>Envío Prioritario (5 a 10 días)-S/17.00</span>
+            <input type="radio" id="radio1Economic" name="envio" value="10" checked={order?.tipoEnvio == "Economico"}/> <span>Económico Aéreo - S/10.00</span>
+            <input type="radio" id="radio2Prioritario" name="envio" value="17" checked={order?.tipoEnvio == "Prioritario"} /> <span>Envío Prioritario (5 a 10 días)-S/17.00</span>
         </article>
         </section>
-            
+
         <section className="cajas">
         <article>
                 <div>
                    <b> Items de pedido</b>
                     
                 </div>
-
-                <span>{order.items} S/{order.precioTotal}.00</span>
+                {order.detalleordens?.map((item) => (
+                    <span >{item.producto.nombre.split(" ").slice(0, 3).join(" ")} x{item.cantidad} S/{item.subTotal}.00<br></br></span>
+                ))}
             </article>
 
             <article>
@@ -162,10 +159,10 @@ export default function DetalleOrden() {
                     <b>Resumen de Orden </b>
                 </div>
                 
-                <span>Subtotal: S/{order.precioTotal}.00<br></br></span>
+                <span>Subtotal: S/{order.subTotal}<br></br></span>
                 <span>Envío: S/{precioEnvio} <br></br></span>
-                <span>Impuestos: S/{impuestos} <br></br></span>
-                <span>Total: S/{precioTotalOrden}<br></br> </span>
+                <span>Impuestos: S/{order.impuestos} <br></br></span>
+                <span>Total: S/{order.total}<br></br> </span>
                 <button id="BotonCancelar">Cancelar Pedido</button>
             </article>
         </section>
