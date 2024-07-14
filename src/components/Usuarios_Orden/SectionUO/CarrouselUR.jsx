@@ -1,7 +1,7 @@
 import React from 'react';
 import SectionCardUR from './SectionCardUR';
 
-export default function CarrouselUR({ data, style }) {
+export default function CarrouselUR({ data }) {
     return (
         <>
             {data.map(usuario => (
