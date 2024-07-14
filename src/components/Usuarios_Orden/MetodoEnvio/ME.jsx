@@ -29,7 +29,7 @@ function MetodoEnvio({ selectedEnvioMethod }) {
                     <input 
                         type="radio" 
                         name="envioM" 
-                        checked={selectedEnvioMethod === 'Económico Aéreo - S/ 10.00'} 
+                        checked={selectedEnvioMethod === 'Economico'} 
                         disabled 
                     /> Económico Aéreo - S/10.00
                 </label>
@@ -37,7 +37,7 @@ function MetodoEnvio({ selectedEnvioMethod }) {
                     <input 
                         type="radio" 
                         name="envioM" 
-                        checked={selectedEnvioMethod === 'Envío prioritario (5 a 10 días) - S/ 17.00'} 
+                        checked={selectedEnvioMethod === 'Prioritario'} 
                         disabled 
                     /> Envío prioritario (5 a 10 días) - S/ 17.00
                 </label>

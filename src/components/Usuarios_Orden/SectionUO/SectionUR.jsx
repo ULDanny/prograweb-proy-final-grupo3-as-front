@@ -1,8 +1,45 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import CarrouselUR from "./CarrouselUR";
-import { Usuarios } from "../../../data/Usuarios";
 import SearchComponent from '../Search/SearchComponent';
-export default function SectionUR(props) {
+import usuarioAPI from '../../../api/usuario';
+import clienteAPI from '../../../api/cliente';
+
+export default function SectionUR() {
+    const [elementosFiltrados, setElementosFiltrados] = useState([]);
+    const [usuarios, setUsuarios] = useState([]);
+
+    useEffect(() => {
+        const fetchUsers = async () => {
+            try {
+                const dataUsuarios = await usuarioAPI.findAll();
+                const dataClientes = await clienteAPI.findAll();
+                const combinedData = dataUsuarios.map(usuario => {
+                    const cliente = dataClientes.find(c => c.idUsuario === usuario.id);
+                    return {
+                        id: usuario.id,
+                        nombre: cliente?.nombre || '',
+                        apellido: cliente?.apellido || '',
+                        email: usuario.email,
+                        estado: usuario.estado,
+                        fecha: cliente?.fechaRegistro || ''
+                    };
+                });
+                setUsuarios(combinedData);
+                setElementosFiltrados(combinedData);
+            } catch (error) {
+                console.error('Error fetching users:', error);
+            }
+        };
+
+        fetchUsers();
+    }, []);
+
+    const criteriosOrdenUsuarios = [
+        { value: 'nombre-a-z', label: 'Nombre (A-Z)', func: (a, b) => a.nombre.localeCompare(b.nombre) },
+        { value: 'nombre-z-a', label: 'Nombre (Z-A)', func: (a, b) => b.nombre.localeCompare(a.nombre) },
+        { value: 'id-asc', label: 'ID (menor a mayor)', func: (a, b) => a.id - b.id },
+        { value: 'id-desc', label: 'ID (mayor a menor)', func: (a, b) => b.id - a.id }
+    ];
 
     const hStyle = {
         fontSize: '14px',
@@ -11,14 +48,11 @@ export default function SectionUR(props) {
         marginBottom: '15px',
         height: '500px',
         marginLeft: '10px'
-
-
     };
 
     const tStyle = {
         width: '100%',
         borderCollapse: 'collapse',
-
     };
 
     const h2Style = {
@@ -37,13 +71,14 @@ export default function SectionUR(props) {
         marginTop: '10px',
     };
 
-    const [elementosFiltrados, setElementosFiltrados] = useState(Usuarios);
     return (
         <section style={hStyle}>
             <h2 style={h2Style}>Usuarios Registrados</h2>
             <SearchComponent
-                usuarios={Usuarios}
+                data={usuarios}
                 setElementosFiltrados={setElementosFiltrados}
+                criteriosOrden={criteriosOrdenUsuarios}
+                placeholder="Buscar por nombre, apellido o correo ..."
             />
             <table style={tStyle}>
                 <thead style={theadStyle}>

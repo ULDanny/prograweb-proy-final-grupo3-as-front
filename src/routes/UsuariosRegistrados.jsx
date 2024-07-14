@@ -1,7 +1,4 @@
-
-//import Header from '../components/HeaderUO/Header'
 import Header from '../components/Shares/Header/Header'
-//import Footer from '../components/FooterUO/Footer'
 import Footer from '../components/Shares/Footer/Footer'
 import Section from '../components/Usuarios_Orden/SectionUO/SectionUR'
 import MenuNavAdmin from '../components/MenuNavAdmin/MenuNavAdmin'

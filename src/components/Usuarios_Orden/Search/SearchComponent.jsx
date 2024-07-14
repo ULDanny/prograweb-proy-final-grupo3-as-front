@@ -1,7 +1,8 @@
 import React from 'react';
-const SearchComponent = ({ usuarios, setElementosFiltrados }) => {
+
+const SearchComponent = ({ data, setElementosFiltrados, criteriosOrden, placeholder }) => {
     const [terminoBusqueda, setTerminoBusqueda] = React.useState('');
-    const [criterioOrden, setCriterioOrden] = React.useState('default');
+    const [criterioOrden, setCriterioOrden] = React.useState(criteriosOrden[0].value);
 
     const handleInputChange = (event) => {
         setTerminoBusqueda(event.target.value);
@@ -12,22 +13,15 @@ const SearchComponent = ({ usuarios, setElementosFiltrados }) => {
     };
 
     const handleShowClick = () => {
-        let filtrados = usuarios.filter(item =>
-            item.nombre.toLowerCase().includes(terminoBusqueda.toLowerCase()) ||
-            item.apellido.toLowerCase().includes(terminoBusqueda.toLowerCase()) ||
-            item.correo.toLowerCase().includes(terminoBusqueda.toLowerCase()) ||
-            item.fechaRegistro.includes(terminoBusqueda) ||
-            item.id.toString().includes(terminoBusqueda)
+        let filtrados = data.filter(item =>
+            Object.values(item).some(val => 
+                val && val.toString().toLowerCase().includes(terminoBusqueda.toLowerCase())
+            )
         );
 
-        if (criterioOrden === 'nombre-a-z') {
-            filtrados = filtrados.sort((a, b) => a.nombre.localeCompare(b.nombre));
-        } else if (criterioOrden === 'nombre-z-a') {
-            filtrados = filtrados.sort((a, b) => b.nombre.localeCompare(a.nombre));
-        } else if (criterioOrden === 'id-asc') {
-            filtrados = filtrados.sort((a, b) => a.id - b.id);
-        } else if (criterioOrden === 'id-desc') {
-            filtrados = filtrados.sort((a, b) => b.id - a.id);
+        const criterio = criteriosOrden.find(c => c.value === criterioOrden);
+        if (criterio) {
+            filtrados = filtrados.sort(criterio.func);
         }
 
         setElementosFiltrados(filtrados);
@@ -36,13 +30,12 @@ const SearchComponent = ({ usuarios, setElementosFiltrados }) => {
     const inputStyleUR = {
         width: '70%',
         height: '30px',
-        marginLeft: "none",
-        paddingLeft: "none",
+        paddingLeft: '10px',
     };
     const selectStyleUR = {
-      height: '30px',
-      width: '15%'
-    }
+        height: '30px',
+        width: '15%',
+    };
     const mostrarUR = {
         marginLeft: '5px',
         padding: '4px',
@@ -51,26 +44,26 @@ const SearchComponent = ({ usuarios, setElementosFiltrados }) => {
         border: 'none',
         borderRadius: '5px',
         cursor: 'pointer',
-    }
+    };
     const divSt = {
-        paddingLeft:'0',
-        marginLeft : '',
-    }
+        display: 'flex',
+        alignItems: 'center',
+        padding: '10px 0',
+    };
 
     return (
         <div style={divSt}>
             <input
                 type="text"
-                placeholder="Buscar por nombre, apellido o id ..."
+                placeholder={placeholder}
                 value={terminoBusqueda}
                 onChange={handleInputChange}
                 style={inputStyleUR}
             />
             <select value={criterioOrden} onChange={handleSortChange} style={selectStyleUR}>
-                <option value='nombre-a-z'>Nombre (A-Z)</option>
-                <option value="nombre-z-a">Nombre (Z-A)</option>
-                <option value="id-asc">ID (menor a mayor)</option>
-                <option value="id-desc">ID (mayor a menor)</option>
+                {criteriosOrden.map(criterio => (
+                    <option key={criterio.value} value={criterio.value}>{criterio.label}</option>
+                ))}
             </select>
             <button onClick={handleShowClick} style={mostrarUR}>Mostrar</button>
         </div>
