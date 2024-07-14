@@ -1,53 +1,64 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { dataProductos } from '../../data/datos';
+import productoApi from '../../api/producto';
 
 const TablaProductos = () => {
     const navigate = useNavigate();
-    const [productos, setProductos] = useState(dataProductos);
+    const [productos, setProductos] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
 
     useEffect(() => {
-        const rawProductos = localStorage.getItem('productos');
-        if (!rawProductos) {
-            localStorage.setItem('productos', JSON.stringify(dataProductos));
-        } else {
-            setProductos(JSON.parse(rawProductos));
-        }
+        handleOnLoad();
     }, []);
 
     useEffect(() => {
         handleSearch();
     }, [searchTerm]);
 
-    const handleSearch = () => {
-        const rawProductos = localStorage.getItem('productos');
-        if (rawProductos) {
-            const allProductos = JSON.parse(rawProductos);
-            const filteredProductos = allProductos.filter(producto =>
+    const handleOnLoad = async () => {
+        try {
+            const productosData = await productoApi.findAll();
+            setProductos(productosData);
+        } catch (error) {
+            console.error('Error al cargar los productos:', error);
+        }
+    };
+
+    const handleSearch = async () => {
+        try {
+            const productosData = await productoApi.findAll();
+            const filteredProductos = productosData.filter(producto =>
                 producto.id.toString().includes(searchTerm) ||
                 producto.nombre.toLowerCase().includes(searchTerm.toLowerCase())
             );
             setProductos(filteredProductos);
+        } catch (error) {
+            console.error('Error al buscar productos:', error);
         }
     };
 
-    const handleEliminar = (id) => {
-        const updatedProductos = productos.filter(producto => producto.id !== id);
-        setProductos(updatedProductos);
-        localStorage.setItem('productos', JSON.stringify(updatedProductos));
+    const handleEliminar = async (id) => {
+        try {
+            await productoApi.remove(id);
+            // Actualizar la lista de productos después de eliminar uno
+            setProductos(productos.filter(producto => producto.id !== id));
+        } catch (error) {
+            console.error('Error al eliminar el producto:', error);
+        }
     };
 
     const handleView = (id) => {
         navigate(`/producto/${id}`);
     };
-    const tablaStyle={
+
+    const tablaStyle = {
         fontSize: '15px'
-    }
-    const nombrestyle ={
+    };
+    const nombrestyle = {
         fontSize: '10px',
         paddingRight: '-100px'
-    }
+    };
+
     return (
         <section style={styles.section}>
             <div style={styles.tituloPagina}>
@@ -71,9 +82,7 @@ const TablaProductos = () => {
                             <th style={tablaStyle}>ID</th>
                             <th style={tablaStyle}>Nombre</th>
                             <th style={tablaStyle}>Precio</th>
-                            <th style={tablaStyle}>Fecha de registro</th>
                             <th style={tablaStyle}>Stock</th>
-                            <th style={tablaStyle}>Estado</th>
                             <th style={tablaStyle}>Acciones</th>
                         </tr>
                     </thead>
@@ -83,9 +92,7 @@ const TablaProductos = () => {
                                 <td style={styles.tablaNombre}>{producto.id}</td>
                                 <td style={nombrestyle}>{producto.nombre}</td>
                                 <td style={styles.tablaNombre}>{producto.precio}</td>
-                                <td style={styles.tablaNombre}>{producto.fechaRegistro}</td>
-                                <td style={styles.tablaNombre}>{producto.stock}</td>
-                                <td style={styles.tablaNombre}>{producto.estado}</td>
+                                    <td style={styles.tablaNombre}>{producto.stock}</td>
                                 <td>
                                     <button type="button" style={styles.BotonAccion} onClick={() => handleView(producto.id)}>Editar</button>
                                     <button type="button" style={styles.BotonAccion} onClick={() => handleEliminar(producto.id)}>Eliminar</button>
@@ -97,7 +104,7 @@ const TablaProductos = () => {
             </div>
         </section>
     );
-}
+};
 
 const styles = {
     section: {
@@ -143,15 +150,6 @@ const styles = {
         border: '1px solid black',
         backgroundColor: 'white',
         boxSizing: 'border-box',
-    },
-    BotonBuscar: {
-        marginLeft: '5px',
-        padding: '8px',
-        backgroundColor: 'black',
-        color: 'white',
-        border: 'none',
-        borderRadius: '5px',
-        cursor: 'pointer',
     },
     tabla: {
         width: '80%',
