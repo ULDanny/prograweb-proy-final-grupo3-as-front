@@ -1,8 +1,9 @@
-import "./checkout.css"
+import "./checkout.css";
 import { useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
 import imagen from "./qrPago.png";
 import cartApi from '../../api/carrito'; // Importar la API del carrito
+import ordenApi from '../../api/orden'; // Importar la API de orden
 
 const Checkout = () => {
     const [cartItems, setCartItems] = useState([]);
@@ -27,7 +28,7 @@ const Checkout = () => {
 
     const subtotal = cartItems.reduce((acc, item) => acc + item.producto.precio * item.cantidad, 0);
     const impuesto = subtotal * 0.18;
-    const total = subtotal + shippingCost;
+    const total = subtotal + shippingCost + impuesto;
 
     const validateForm = () => {
         const form = document.querySelector('form');
@@ -43,12 +44,42 @@ const Checkout = () => {
         return isValid;
     };
 
-    const handleButtonClick = (event) => {
+    const handleButtonClick = async (event) => {
+        event.preventDefault();
         if (!validateForm()) {
-            event.preventDefault();
             alert('Por favor, completa todos los campos requeridos antes de enviar el formulario.');
         } else {
-            navigate('/OrderComplete');
+            const form = document.querySelector('form');
+            const direccion1 = form.querySelector('#direccion1').value;
+            const direccion2 = form.querySelector('#direccion2').value;
+            const distrito = form.querySelector('#distrito').value;
+            const ciudad = form.querySelector('#ciudad').value;
+            const pais = form.querySelector('#pais').value;
+            const tipoPago = metodoPago === 'qr' ? 'Pago con código QR' : 'Tarjeta de Crédito';
+            const tipoEnvio = shippingMethod === 'economico' ? 'Económico Aéreo' : 'Envío prioritario';
+            
+            const orderData = {
+                idCliente: 1, // Debes reemplazar esto con el ID del cliente real
+                fechaOrden: new Date().toISOString().split('T')[0],
+                envios: "Pendiente",
+                direccion: `${direccion1} ${direccion2}`,
+                distrito: distrito,
+                departamento: ciudad, // Si departamento es diferente de ciudad, ajusta esto
+                pais: pais,
+                tipoPago: tipoPago,
+                tipoEnvio: tipoEnvio,
+                subTotal: subtotal,
+                impuestos: impuesto,
+                total: total
+            };
+
+            try {
+                await ordenApi.create(orderData);
+                navigate('/OrderComplete');
+            } catch (error) {
+                console.error('Error sending order:', error);
+                alert(`Hubo un problema al enviar tu orden: ${error.message}. Por favor, intenta de nuevo.`);
+            }
         }
     };
 
