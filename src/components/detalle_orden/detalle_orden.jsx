@@ -49,7 +49,7 @@ export default function DetalleOrden() {
                 TIPODEPAGO();
             }
 
-            if (order.tipoEnvio == "Economico"){
+            if (order.tipoEnvio == "Económico Aéreo"){
                 setPrecioEnvio(10.0)
             }else {
                 setPrecioEnvio(17.0)
@@ -142,7 +142,7 @@ export default function DetalleOrden() {
             <article>
                 <div>
                     <b>Pago</b><br></br>
-                    <input type="radio" id="PAGOQR" name="metpago" value="QR"  checked={order?.tipoPago == "Yape"} /> <span>Pago con código QR</span><br></br>
+                    <input type="radio" id="PAGOQR" name="metpago" value="QR"  checked={order?.tipoPago == "Pago con código QR"} /> <span>Pago con código QR</span><br></br>
                     <PagoQR display={displayPagoQR}/>
                     <input type="radio" id="PAGOTARJETA" name="metpago" value="Tarjeta"  checked={order?.tipoPago== "Tarjeta de Crédito"}/> <span>Pago con tarjeta de crédito</span><br></br> <br></br>
                     <PagoTarjeta display={displayPagoTarjeta}/>
@@ -154,8 +154,8 @@ export default function DetalleOrden() {
         
         <section className="radios">
             <article className="radiostodo">
-            <input type="radio" id="radio1Economic" name="envio" value="10" checked={order?.tipoEnvio == "Economico"}/> <span>Económico Aéreo - S/10.00</span>
-            <input type="radio" id="radio2Prioritario" name="envio" value="17" checked={order?.tipoEnvio == "Prioritario"} /> <span>Envío Prioritario (5 a 10 días)-S/17.00</span>
+            <input type="radio" id="radio1Economic" name="envio" value="10" checked={order?.tipoEnvio == "Económico Aéreo"}/> <span>Económico Aéreo - S/10.00</span>
+            <input type="radio" id="radio2Prioritario" name="envio" value="17" checked={order?.tipoEnvio == "Envío prioritario"} /> <span>Envío Prioritario (5 a 10 días)-S/17.00</span>
         </article>
         </section>
 
