@@ -15,6 +15,7 @@ export default function Login() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error,setError] = useState(false);
+    const [errorText,setErrorText] = useState('');
     const navigate = useNavigate();
     const { login } = useAuthUser();
 
@@ -38,8 +39,13 @@ export default function Login() {
 
     function handleSubmit(e) {
         e.preventDefault();
-        const user = userAccounts.find(user => user.email === email && user.password === password);
+        const user = userAccounts.find(user => user.email === email && user.password === password );
         if (user) {
+          if(user.estado != 'Activo'){
+            setErrorText('Usuario bloqueado. Enviar un correo a soporte@mail.com');
+            setError(true);
+            return;
+          }
           login(user); 
           if (user.rol == 'admin') {
             const data = { ...user,idCliente:null, username: null, lastname: null };
@@ -52,6 +58,7 @@ export default function Login() {
           localStorage.setItem('user', JSON.stringify(data));
           navigate('/');
         } else {
+          setErrorText('Usuario o contraseña incorrectos');
           setError(true);
         }
       }
@@ -80,7 +87,7 @@ export default function Login() {
                     
        
                     <br />
-                    {error && <p className='errorMessage'>Usuario o contraseña incorrectos</p>}
+                    {error && <p className='errorMessage'>{errorText}</p>}
                 <br />
                 <button className="submitButton" type="submit" >Ingresar</button>
                 <br />
