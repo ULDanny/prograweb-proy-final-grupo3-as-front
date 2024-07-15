@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import imagen from "./qrPago.png";
 import cartApi from '../../api/carrito'; // Importar la API del carrito
 import ordenApi from '../../api/orden'; // Importar la API de orden
+import detalleOrdenApi from '../../api/detalleOrden'; // Importar la API de detalle de orden
 
 const Checkout = () => {
     const [cartItems, setCartItems] = useState([]);
@@ -57,7 +58,7 @@ const Checkout = () => {
             const pais = form.querySelector('#pais').value;
             const tipoPago = metodoPago === 'qr' ? 'Pago con código QR' : 'Tarjeta de Crédito';
             const tipoEnvio = shippingMethod === 'economico' ? 'Económico Aéreo' : 'Envío prioritario';
-            
+
             const orderData = {
                 idCliente: 1, // Debes reemplazar esto con el ID del cliente real
                 fechaOrden: new Date().toISOString().split('T')[0],
@@ -74,7 +75,18 @@ const Checkout = () => {
             };
 
             try {
-                await ordenApi.create(orderData);
+                const createdOrder = await ordenApi.create(orderData);
+
+                for (const item of cartItems) {
+                    const detalleOrdenData = {
+                        idOrden: createdOrder.id, 
+                        idProducto: item.producto.id,
+                        cantidad: item.cantidad,
+                        subTotal: (item.producto.precio * item.cantidad).toFixed(2)
+                    };
+                    await detalleOrdenApi.create(detalleOrdenData);
+                }
+
                 navigate('/OrderComplete');
             } catch (error) {
                 console.error('Error sending order:', error);
