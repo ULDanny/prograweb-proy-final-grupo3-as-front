@@ -1,18 +1,35 @@
-import React, { useState } from 'react';
-import userAccounts from '../../data/userAccounts';
+import React, { useEffect, useState } from 'react';
+//import userAccounts from '../../data/userAccounts';
 import Header from '../Shares/Header/Header';
 import Footer from '../Shares/Footer/Footer';
+import usuarioApi from '../../api/usuario.js';
 
 
 export default function Recuperacion() {
     const [email, setEmail] = useState('');
     const [message,setMessage] = useState('');
+    const [userAccounts, setUserAccounts] = useState([]);
+
+    useEffect(() => {
+        handleOnLoad();
+    }, []);
+
+    const handleOnLoad = async () => {
+        try {
+          const usuariosData = await usuarioApi.findAll();
+          setUserAccounts(usuariosData);
+          console.log(usuariosData);
+        } catch (error) {
+          console.log(error);
+        }
+      }
     
     function handleSubmit(e) {
         e.preventDefault();
         const user = userAccounts.find(user => user.email === email);
         if (user) {
-            setMessage('Se ha enviado un correo electrónico con las instrucciones para recuperar la contraseña')
+            setMessage('Se ha enviado un correo electrónico con las instrucciones para recuperar la contraseña');
+            console.log(user.password);
         } else {
             setMessage('El correo electrónico no está registrado');
         }
