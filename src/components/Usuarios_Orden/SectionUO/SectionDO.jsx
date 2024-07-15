@@ -113,8 +113,16 @@ const SectionDO = () => {
         return <p>Cargando datos...</p>;
     }
 
-    const handleCancelOrder = () => {
-        alert('Pedido cancelado');
+    const handleCancelOrder = async () => {
+        const updatedOrder = { id:orden.id, envios: 'Cancelado' };
+        try {
+            await ordenApi.update(updatedOrder);
+            alert('Pedido cancelado');
+        } catch (error) {
+            console.log(error);
+            alert('error al cancelar pedido');
+        }
+        
     };
 
     return (
