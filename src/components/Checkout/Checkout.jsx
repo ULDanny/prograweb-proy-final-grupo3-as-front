@@ -73,7 +73,7 @@ const Checkout = () => {
             const tipoEnvio = shippingMethod === 'economico' ? 'Económico Aéreo' : 'Envío prioritario';
 
             const orderData = {
-                idCliente: user.id,
+                idCliente: user.idCliente,
                 fechaOrden: new Date().toISOString().split('T')[0],
                 envios: "Pendiente",
                 direccion: `${direccion1} ${direccion2}`,
