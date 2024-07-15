@@ -6,22 +6,36 @@ import cartApi from '../../api/carrito'; // Importar la API del carrito
 
 const StructureItem = () => {
     const { cartItems, setCartItems, savedItems, setSavedItems } = useContext(CartContext);
+    const [user, setUser] = useState(JSON.parse(localStorage.getItem('user')));
+    const [clienteId, setClienteId] = useState(JSON.parse(localStorage.getItem('user')).idCliente);
 
     useEffect(() => {
-        const fetchCartItems = async () => {
-            try {
-                const items = await cartApi.findAllComplete();
-                const cart = items.filter(item => !item.paraDespues);
-                const saved = items.filter(item => item.paraDespues);
-                setCartItems(cart);
-                setSavedItems(saved);
-            } catch (error) {
-                console.error('Error fetching cart items:', error);
-            }
-        };
-
-        fetchCartItems();
+        console.log(user);
+        if (user) {
+            console.log('ok');
+            fetchCartItems();
+        }
+        
     }, []);
+
+    const fetchCartItems = async () => {
+        try {
+            console.log(clienteId);
+            await cartApi.findAllComplete()
+                .then((items) => {
+                    console.log(items);
+                    console.log(user.clienteId);
+            const cart = items.filter(item => !item.paraDespues && item.idCliente == clienteId);
+            console.log(cart);
+            const saved = items.filter(item => item.paraDespues && item.idCliente == clienteId);
+            console.log(saved);
+            setCartItems(items.filter(item => !item.paraDespues && item.idCliente ==clienteId));
+            setSavedItems(items.filter(item => item.paraDespues && item.idCliente == clienteId));
+             })
+        } catch (error) {
+            console.error('Error fetching cart items:', error);
+        }
+    };
 
     const Total = () => {
         return cartItems.reduce((total, item) => {
@@ -112,6 +126,7 @@ const StructureItem = () => {
     const hasItemsInCart = cartItems.length > 0;
 
     return (
+        (user?.id) ? 
         <div className="container-Shoppingcart">
             <h2>Carrito de compras</h2>
             <p className="dispo-envio">Items disponibles para envio</p>
@@ -150,7 +165,7 @@ const StructureItem = () => {
                     />
                 ))
             )}
-        </div>
+        </div> : <h2>Inicie sesión para ver su carrito</h2> 
     );
 }
 

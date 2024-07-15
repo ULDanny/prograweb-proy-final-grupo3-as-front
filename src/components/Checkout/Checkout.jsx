@@ -12,20 +12,33 @@ const Checkout = () => {
     const [shippingCost, setShippingCost] = useState(10.0);
     const navigate = useNavigate();
     const [metodoPago, setMetodoPago] = useState('qr');
+    const [user, setUser] = useState({});
+    const [idCliente, setIdCliente] =  useState(JSON.parse(localStorage.getItem('user')).idCliente);
 
     useEffect(() => {
-        const fetchCartItems = async () => {
-            try {
-                const items = await cartApi.findAllComplete();
-                const itemsInPedido = items.filter(item => !item.paraDespues);
-                setCartItems(itemsInPedido);
-            } catch (error) {
-                console.error('Error fetching cart items:', error);
-            }
-        };
+        const userRaw = localStorage.getItem('user');
+        if (userRaw) {
+            setUser(JSON.parse(userRaw));
+        }else
+        {
+            return;
+        }
+
+        
 
         fetchCartItems();
     }, []);
+
+
+    const fetchCartItems = async () => {
+        try {
+            const items = await cartApi.findAllComplete();
+            const itemsInPedido = items.filter(item => !item.paraDespues && item.idCliente == idCliente);
+            setCartItems(itemsInPedido);
+        } catch (error) {
+            console.error('Error fetching cart items:', error);
+        }
+    };
 
     const subtotal = cartItems.reduce((acc, item) => acc + item.producto.precio * item.cantidad, 0);
     const impuesto = subtotal * 0.18;
@@ -60,12 +73,12 @@ const Checkout = () => {
             const tipoEnvio = shippingMethod === 'economico' ? 'Económico Aéreo' : 'Envío prioritario';
 
             const orderData = {
-                idCliente: 1, // Debes reemplazar esto con el ID del cliente real
+                idCliente: user.id,
                 fechaOrden: new Date().toISOString().split('T')[0],
                 envios: "Pendiente",
                 direccion: `${direccion1} ${direccion2}`,
                 distrito: distrito,
-                departamento: ciudad, // Si departamento es diferente de ciudad, ajusta esto
+                departamento: ciudad, 
                 pais: pais,
                 tipoPago: tipoPago,
                 tipoEnvio: tipoEnvio,
@@ -85,6 +98,7 @@ const Checkout = () => {
                         subTotal: (item.producto.precio * item.cantidad).toFixed(2)
                     };
                     await detalleOrdenApi.create(detalleOrdenData);
+                    await cartApi.remove(item.id);
                 }
 
                 navigate('/OrderComplete');
@@ -99,7 +113,7 @@ const Checkout = () => {
         setMetodoPago(event.target.value);
     };
 
-    return (
+    return ((user?.id) ?
         <>
             <h2 className="main-title">¡Casi Listo! Tu orden no estará completa hasta que revises y presiones el botón “completar orden” al final de la página.</h2>
             <form>
@@ -215,7 +229,7 @@ const Checkout = () => {
                 </div>
 
             </form>
-        </>
+        </> : <h2 className="main-title">Por favor, inicia sesión para completar tu orden.</h2>
     );
 }
 

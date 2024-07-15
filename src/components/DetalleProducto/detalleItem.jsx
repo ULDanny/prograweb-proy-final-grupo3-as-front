@@ -8,7 +8,8 @@ const ItemDetail = () => {
     const { itemId } = useItemId();
     const [count, setCount] = useState(1); // Inicializar con 1 en vez de 0
     const [item, setItem] = useState(null);
-    const idCliente = 1; // Asumiendo un cliente con id 1, puedes ajustar esto según tu contexto
+    const [idCliente,setIdCliente] = useState(null); 
+    const [user, setUser] = useState({});
     const navigate = useNavigate(); // Para navegación
 
     // Obtener detalles del producto
@@ -25,6 +26,15 @@ const ItemDetail = () => {
         fetchProduct();
     }, [itemId]);
 
+    useEffect(() => {
+        const userStorage = JSON.parse(localStorage.getItem('user'));
+        if (userStorage) {
+            setUser(userStorage);
+            console.log(userStorage);
+            setIdCliente(userStorage.id);
+        }
+    }, []);
+
     const handleIncrement = () => {
         setCount(count + 1);
     }
@@ -34,6 +44,10 @@ const ItemDetail = () => {
     }
 
     const handleAddToCart = async () => {
+        if (!idCliente) {
+            alert('Por favor inicie sesión para agregar productos al carrito');
+            return;
+        }
         try {
             if (item) {
                 const cartItem = {
