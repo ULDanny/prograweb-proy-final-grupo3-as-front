@@ -31,7 +31,7 @@ const ItemDetail = () => {
         if (userStorage) {
             setUser(userStorage);
             console.log(userStorage);
-            setIdCliente(userStorage.id);
+            setIdCliente(userStorage.idCliente);
         }
     }, []);
 
